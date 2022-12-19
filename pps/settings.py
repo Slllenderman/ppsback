@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^814^*=m4&v4bwz@)y+=uikmlxhu5g=fpagt=xs2!jd+8^bo#(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 MEDIA_ROOT = BASE_DIR / 'ppsproj/'
 
@@ -52,7 +52,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
@@ -109,16 +108,14 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    }
 ]
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1']
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

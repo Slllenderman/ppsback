@@ -6,6 +6,8 @@ from ppsproj import views as pps_views
 router = routers.DefaultRouter()
 router.register(r'products', pps_views.Products)
 router.register(r'providers', pps_views.Providers)
+router.register(r'orders', pps_views.Orders)
+router.register(r'shoppingcarts', pps_views.ShoppingCart)
 
 urlpatterns = [
     path('', include(router.urls)),

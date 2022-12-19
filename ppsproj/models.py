@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from uuid import uuid4
 
 class Provider(models.Model):
     name = models.CharField(max_length=50)
@@ -21,19 +22,26 @@ class Product(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
 
 class ShoppingCart(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    STATES = [
+        ('P', 'Processing'),
+        ('A', 'Accepted'),
+        ('R', 'Rejected')
+    ]
     address = models.CharField(max_length=100)
     date = models.DateField()
+    state = models.CharField(max_length=1, choices=STATES, default='P')
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Order(models.Model):
     STATES = [
         ('P', 'Processing'),
         ('A', 'Accepted'),
-        ('R', 'Rejected')
+        ('R', 'Rejected'),
     ]
     quantity = models.IntegerField()
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    state = models.CharField(max_length=1, choices=STATES)
+    state = models.CharField(max_length=1, choices=STATES, default='P')
     shCart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE)
 
 
