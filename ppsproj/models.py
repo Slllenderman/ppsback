@@ -5,7 +5,7 @@ from uuid import uuid4
 class Provider(models.Model):
     name = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
-    photo = models.ImageField(upload_to="./static/logos", default=None) 
+    photo = models.ImageField(upload_to="./static/logos") 
     description = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -18,7 +18,7 @@ class Product(models.Model):
     state = models.CharField(max_length=1, choices=STATES, default='S')
     price = models.FloatField()
     category = models.CharField(max_length=20)
-    photo = models.ImageField(upload_to="./static/prods", default=None)
+    photo = models.ImageField(upload_to="./static/prods")
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
 
 class ShoppingCart(models.Model):

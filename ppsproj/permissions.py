@@ -31,3 +31,20 @@ class IsProviderPermission(permissions.BasePermission):
             return username == request.user.username
         else:
             return True
+
+class IsOneToOneProviderPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if(request.method == 'POST'):
+            username = request.GET.get('username', '')
+            if(username == ''): return False
+            try:
+                user = User.objects.get(username=username)
+                try:
+                    provider = Provider.objects.get(user=user.pk)
+                    return False
+                except Provider.DoesNotExist:
+                    return True
+            except User.DoesNotExist:
+                return False
+        else:
+            return True

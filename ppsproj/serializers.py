@@ -2,13 +2,19 @@ from .models import *
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-class ProviderSerializer(serializers.ModelSerializer):
+
+class PutProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Provider
+        fields = ["pk", "name", "location", "photo", "description", "user"]
+
+class GetProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Provider
         fields = ["pk", "name", "location", "photo", "description"]
 
 class GetProductSerializer(serializers.ModelSerializer):
-    provider = ProviderSerializer(many=False)
+    provider = GetProviderSerializer(many=False)
     class Meta:
         model = Product
         fields = ["pk", "name", "price", "photo", "provider"]

@@ -19,9 +19,18 @@ class Products(viewsets.ModelViewSet):
 class Providers(viewsets.ModelViewSet):
     filterset_class = ProvidersFilter
     queryset = Provider.objects.all()
-    serializer_class = ProviderSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsProviderPermission]
-
+    permission_classes = [IsAuthenticatedOrReadOnly, IsProviderPermission, IsOneToOneProviderPermission]
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return GetProviderSerializer
+        else:
+            return PutProviderSerializer
+    def create(self, request):
+        username = request.GET.get('username', '')
+        user = User.objects.get(username=username).pk
+        request.data.update({'user' : user})
+        return super().create(request)
+        
 class Orders(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     filterset_class = OrdersFilter
