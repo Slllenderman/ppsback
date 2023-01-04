@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'djoser',
+    'corsheaders',
     'django_filters',
 ]
 
@@ -65,6 +66,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
 ]
 
 ROOT_URLCONF = 'pps.urls'

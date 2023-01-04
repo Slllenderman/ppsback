@@ -29,9 +29,10 @@ class ProductsFilter(filters.FilterSet):
         fields = ['category', 'name', 'price', 'provider']
 
 class OrdersFilter(filters.FilterSet):
+    provider = filters.CharFilter(field_name='product__provider', lookup_expr='exact')
     class Meta:
         model = Order
-        fields = ['shCart']
+        fields = ['shCart', 'provider']
 
 class ShCartFilter(filters.FilterSet):
     id = filters.CharFilter(field_name='id', lookup_expr='icontains')
@@ -43,6 +44,7 @@ class ShCartFilter(filters.FilterSet):
         lookup_expr="exact",
         queryset=User.objects.all() 
     )
+    state = filters.ChoiceFilter(choices=ShoppingCart.STATES)
     class Meta:
         model = ShoppingCart
-        fields = ['id', 'username', 'location', 'date']
+        fields = ['id', 'username', 'location', 'date', 'state']

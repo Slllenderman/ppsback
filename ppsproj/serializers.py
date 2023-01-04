@@ -17,19 +17,19 @@ class GetProductSerializer(serializers.ModelSerializer):
     provider = GetProviderSerializer(many=False)
     class Meta:
         model = Product
-        fields = ["pk", "name", "price", "photo", "provider"]
+        fields = ["pk", "name", "price", "description", "photo", "provider"]
 
 
 class PutProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ["pk", "name", "price", "photo", "provider"]
+        fields = ["pk", "name", "price", "description", "category", "photo", "provider"]
 
 class GetOrdersSerializer(serializers.ModelSerializer):
     product = GetProductSerializer(many = False)
     class Meta:
         model = Order
-        fields = ["pk", "state", "quantity", "product"]
+        fields = ["pk", "state", "quantity", "product", "shCart"]
 
 
 class PutOrdersSerializer(serializers.ModelSerializer):
@@ -37,8 +37,12 @@ class PutOrdersSerializer(serializers.ModelSerializer):
         model = Order
         fields = ["pk", "quantity", "product", "shCart"]
 
-class ShCartSerializer(serializers.ModelSerializer):
+class PutShCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCart
-        fields = ["pk", "address", "date", "state", "customer"]
+        fields = ["pk", "address", "date", "customer"]
 
+class GetShCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoppingCart
+        fields = ["pk", "address", "date", "state", "customer", "creatingTime", "confirmedTime"]

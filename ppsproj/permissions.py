@@ -2,25 +2,42 @@ from rest_framework import permissions
 from .models import *
 
 
-class IsOrderOwnerPermission(permissions.BasePermission):
+class OrderOwnerPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if(request.user.is_superuser): 
             return True
         pk = request.GET.get('shCart', '')
-        if(pk == ''): 
-            return False
-        cart = ShoppingCart.objects.get(pk=pk)
-        return cart.customer.username == request.user.username
+        provider = request.GET.get('provider', '')
+        if(provider == ''):
+            if(pk == ''): 
+                return False
+            cart = ShoppingCart.objects.get(pk=pk)
+            return cart.customer.username == request.user.username
+        else:
+            provider = Provider.objects.get(pk=provider)
+            return provider.user.username == request.user.username
 
-    def has_object_permission(self, request, view, obj):
-        return False
 
-class IsShCartOwnerPermission(permissions.BasePermission):
+class ShCartOwnerPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if(request.user.is_superuser):
             return True
-        username = request.GET.get('username', '')
-        return username == request.user.username
+        if(request.method == 'PUT'):
+            try:
+                cartId = request.GET.get('shCart', '')
+                cart = ShoppingCart.objects.get(id=cartId)
+                return cart.customer.username == request.user.username
+            except:
+                return False
+        else:
+            provider = request.GET.get('provider', '')
+            if(provider == ''):
+                username = request.GET.get('username', '')
+                return username == request.user.username
+            else:
+                provider = Provider.objects.get(pk=provider)
+                return provider.user.username == request.user.username
+
 
 class IsProviderPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -31,6 +48,7 @@ class IsProviderPermission(permissions.BasePermission):
             return username == request.user.username
         else:
             return True
+
 
 class IsOneToOneProviderPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -48,3 +66,13 @@ class IsOneToOneProviderPermission(permissions.BasePermission):
                 return False
         else:
             return True
+
+
+class StatusPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'PUT':
+            status = request.GET.get('status', '')
+            if status != 'R' and status != 'A' : return False
+            else : return True
+        else:
+            return True 
